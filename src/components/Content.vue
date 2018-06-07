@@ -1,18 +1,13 @@
 <template>
   <div>
-    <nav class="navbar navbar-light bg-light">
-      <form class="form-inline">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" v-model="query">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" @click="search">cari</button>
-      </form>
-    </nav>
+    <h1>Click this button to upload image</h1>
     <div class="wrap" v-on:submit.prevent="uploadImage">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#create">Tambah Buku Baru</button>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#create">upload image</button>
         <div class="modal" tabindex="-1" role="dialog" id='create'>
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Tambah Buku Baru</h5>
+                        <h5 class="modal-title">upload image</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -29,17 +24,10 @@
             </div>
         </div>
     </div>
-    <div class="card" style="width: auto margin: 20px;" v-for="(book, index) in books" v-bind:key="index">
+    <div class="card" style="width: auto margin: 20px;" v-for="(image, index) in images" v-bind:key="index">
       <div class="card" style="width: 18rem;">
-        <img class="card-img-top" :src="book.imageUrl" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">{{book.judul}}</h5>
-          <p class="card-text"> Posted by : {{book.userId[0].username}}</p>
-          <p class="card-text"> posted at {{book.createdAt | moment("MMMM Do YYYY, h:mm:ss")}}</p>
-          <router-link :to="{ name: 'articledetail', params: { id: book._id }}"><h5 class="card-title">Detail</h5></router-link>
-          <router-view/>
-        </div>
-      </div>
+        <img class="card-img-top" :src="image.imageUrl" alt="Card image cap">
+    </div>
   </div>
   </div>  
 </template>
@@ -56,11 +44,11 @@ export default {
   },
   computed: {
   ...mapState([
-    'books'
+    'images'
   ])
   },
   created () {
-    // this.$store.dispatch('getAllPost', headers)
+    this.$store.dispatch('getAllPost')
   },
   methods: {
     onFilePicked() {
@@ -68,7 +56,7 @@ export default {
     },
     uploadImage() {
      let formData = new FormData()
-     formData.append('photo', this.file)
+     formData.append('file', this.file)
      this.$store.dispatch('uploadImage', formData)
     },
   }

@@ -8,12 +8,17 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     token : '',
+    images: ''
 
   },
   mutations: {
     settoken (state, payload) {
       console.log('commit', payload)
       state.token = payload
+    },
+    setImage (state, payload) {
+      console.log('commit', payload)
+      state.image = payload
     },
   },
   actions: {
@@ -23,6 +28,7 @@ export default new Vuex.Store({
         .then(response => {
           console.log(response.data.uuid)
           context.commit('settoken', response.data.uuid)
+          localStorage.setItem('useruploader', response.data.uuid)
           swal('successfuly get token')
         })
         .catch(function (err) {
@@ -30,10 +36,24 @@ export default new Vuex.Store({
         })
     },
     uploadImage: function (context, payload) {
-      let headers = this.token
-      axios.post('http://35.197.135.159/image', payload.formData, {headers})
+      let token = window.localStorage["useruploader"]
+      let headers = {authorization : token}
+      console.log("header =",headers)
+      axios.post('http://35.197.135.159/image', payload, {headers})
       .then(response => {
         console.log('success', response.data)
+      })
+      .catch(function (err) {
+        console.log(err)
+      })
+    },
+    getAllPost: function (context) {
+      let token = window.localStorage["useruploader"]
+      let headers = {authorization : token}
+      axios.get('http://35.197.135.159/image', {headers})
+      .then(response => {
+        console.log('success', response)
+        context.commit('setImage', response.data.data)
       })
       .catch(function (err) {
         console.log(err)
