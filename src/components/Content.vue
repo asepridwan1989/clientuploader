@@ -24,12 +24,13 @@
             </div>
         </div>
     </div>
-    <div class="card" style="width: auto margin: 20px;" v-for="(image, index) in images" v-bind:key="index">
-      <div class="card" style="width: 18rem;">
-        <img class="card-img-top" :src="image.imageUrl" alt="Card image cap">
+    <div class="card" style="justify-content:center; width: auto margin: 20px;" v-for="(image, index) in images" v-bind:key="index">
+        <img :src="image.url" alt="Card image cap" width="30%">
+        <div class="card-body">
+          <h3 class="card-text"> Posted by : {{image.user.name}}</h3>
+        </div>
     </div>
   </div>
-  </div>  
 </template>
 
 <script>
@@ -58,6 +59,7 @@ export default {
      let formData = new FormData()
      formData.append('file', this.file)
      this.$store.dispatch('uploadImage', formData)
+     this.$store.dispatch('getAllPost')
     },
   }
 }

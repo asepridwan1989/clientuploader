@@ -18,7 +18,7 @@ export default new Vuex.Store({
     },
     setImage (state, payload) {
       console.log('commit', payload)
-      state.image = payload
+      state.images = payload
     },
   },
   actions: {
@@ -52,8 +52,9 @@ export default new Vuex.Store({
       let headers = {authorization : token}
       axios.get('http://35.197.135.159/image', {headers})
       .then(response => {
-        console.log('success', response)
-        context.commit('setImage', response.data.data)
+        console.log('success', response.data)
+        let payload = response.data
+        context.commit('setImage', payload)
       })
       .catch(function (err) {
         console.log(err)
